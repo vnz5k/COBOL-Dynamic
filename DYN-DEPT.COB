@@ -1,6 +1,6 @@
       *********************************************************
       *PROGRAMA  1 - MUESTRA EN PANTALLA TODOS LOS REGISTROS  *
-      *CLASIFICADOS POR EL ID DE EMPLEADO.                    *
+      *CLASIFICADOS POR EL APARTAMENTO.                       *
       *********************************************************
 
        IDENTIFICATION DIVISION.
