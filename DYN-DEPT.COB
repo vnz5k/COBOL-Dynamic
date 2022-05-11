@@ -1,5 +1,5 @@
       *********************************************************
-      *PROGRAMA  1 - MUESTRA EN PANTALLA TODOS LOS REGISTROS  *
+      *PROGRAMA  2 - MUESTRA EN PANTALLA TODOS LOS REGISTROS  *
       *CLASIFICADOS POR EL APARTAMENTO.                       *
       *********************************************************
 
