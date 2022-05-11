@@ -16,6 +16,7 @@
        DATA DIVISION.
        FILE SECTION.
        FD EMPLEADO.
+      *Se cambian los indices a ALPHANUMERIC para evitar error de duplicado.
        01 REG-EMPL.
                05 ID-EMPL              PIC 9(03).
                05 NOM-EMPL             PIC X(30).
@@ -35,6 +36,7 @@
        PROCEDURE DIVISION.
        001-INI.
            PERFORM 100-CREA
+      *Condicione el campo departamento y el campo f-ing, agregue THRU.
            PERFORM 100-PROCESO THRU 102-FING UNTIL WS-FLAG = 1
            PERFORM 200-CERRAR
            STOP RUN.
@@ -55,7 +57,7 @@
            DISPLAY 'ELIGE UN DEPARTAMENTO'.
            DISPLAY '1 LIMPIEZA | 2 COBRANZA  | 3 SISTEMAS'.
            DISPLAY 'NOM-DEP:'           ACCEPT NOM-DEP.
-
+      *Se condicionan para crear el indice descrito en la ENVIRONMENT.
            EVALUATE TRUE
                WHEN NOM-DEP EQUAL 1 MOVE 'LIMPIEZA' TO NOM-DEP
                WHEN NOM-DEP EQUAL 2 MOVE 'COBRANZA' TO NOM-DEP
@@ -64,7 +66,7 @@
                PERFORM 101-DEP.
 
            DISPLAY 'S-TAB'             ACCEPT S-TAB.
-
+      *El  campo de sueldo es  libre  o puede ser a las opciones.
            DISPLAY 'INGRESA EL SUELDO O ELIGE UNA OPCION'.
            DISPLAY '1 $10,000 | 2 $20,000 | 3 $30,000'.
            DISPLAY 'S-MEN'             ACCEPT S-MEN.
@@ -76,13 +78,13 @@
 
            102-FING.
            DISPLAY 'INGRESA FECHA DE INGRESO MAYOR DE 2019'.
-           DISPLAY 'F-ING:'.
-           ACCEPT F-ING.
+           DISPLAY 'F-ING:'.           ACCEPT F-ING.
 
+      *Condicione la fecha debido al indice requerido en la ENVIRONMENT.
            IF F-ING LESS 20190101 DISPLAY 'FECHA MENOR A 2019'
                PERFORM  102-FING.
                IF F-ING GREATER 20190101 DISPLAY 'FECHA REGISTRADA'
-           WRITE REG-EMPL DISPLAY 'ESCRITO'.
+               WRITE REG-EMPL DISPLAY 'ESCRITO'.
 
                DISPLAY 'DESEAS AGREGAR OTRO REGISTRO? S/N'.
                ACCEPT WS-RES
