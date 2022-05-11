@@ -7,6 +7,10 @@
            SELECT EMPLEADO ASSIGN TO 'C:\Users\pc\Desktop\S\IDYN'
            ORGANIZATION IS INDEXED
            RECORD KEY IS ID-EMPL
+           ALTERNATE KEY NOM-DEP
+           WITH DUPLICATES
+           ALTERNATE KEY F-ING
+           WITH DUPLICATES
            ACCESS MODE  IS DYNAMIC.
 
        DATA DIVISION.
@@ -19,7 +23,7 @@
                05 NOM-DEP              PIC X(20).
                05 S-TAB                PIC A.
                05 S-MEN                PIC 9(05).
-               05 F-ING                PIC 9(08).
+               05 F-ING                PIC X(08).
        WORKING-STORAGE SECTION.
        01 WS-RES                       PIC X.
        01 WS-FLAG                      PIC 9 VALUE 0.
@@ -54,8 +58,8 @@
 
            EVALUATE TRUE
                WHEN NOM-DEP EQUAL 1 MOVE 'LIMPIEZA' TO NOM-DEP
-               WHEN NOM-DEP EQUAL 2 MOVE 'LIMPIEZA' TO NOM-DEP
-               WHEN NOM-DEP EQUAL 3 MOVE 'LIMPIEZA' TO NOM-DEP
+               WHEN NOM-DEP EQUAL 2 MOVE 'COBRANZA' TO NOM-DEP
+               WHEN NOM-DEP EQUAL 3 MOVE 'SISTEMAS' TO NOM-DEP
                WHEN OTHER DISPLAY 'NO EXISTE DEPARTAMENTO'
                PERFORM 101-DEP.
 
@@ -72,7 +76,8 @@
 
            102-FING.
            DISPLAY 'INGRESA FECHA DE INGRESO MAYOR DE 2019'.
-           DISPLAY 'F-ING:'.             ACCEPT F-ING.
+           DISPLAY 'F-ING:'.
+           ACCEPT F-ING.
 
            IF F-ING LESS 20190101 DISPLAY 'FECHA MENOR A 2019'
                PERFORM  102-FING.
