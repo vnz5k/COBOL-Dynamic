@@ -1,6 +1,6 @@
       ******************************************************************
-      *                    CONSULTA ID & MODIFICA                      *
-      *                                                                 *
+      *                    CONSULTA TODOS LOS REGISTROS                 *
+      *                       AGREGA REGISTROS                          *
       ******************************************************************
 
        IDENTIFICATION DIVISION.
@@ -28,51 +28,54 @@
            05 F-ING                    PIC X(08).
        WORKING-STORAGE SECTION.
        01 WS-AREA.
-           05 WS-RES PIC 999 VALUE 0.
+           05 WS-RES PIC X.
            05 WS-MID PIC X VALUE 'A'.
            05 WS-ID-EMPL PIC 9(03).
        01 WS-FLAGER.
            05 WS-FLAG PIC 9 VALUE 0.
            05 WS-FLAG2 PIC 9 VALUE 0.
 
-       PROCEDURE  DIVISION.
+       PROCEDURE DIVISION.
        010-INITIAL.
-           PERFORM 100-ABRIR
-           PERFORM 100-ID UNTIL ID-EMPL = 999.
-           PERFORM 100-CERRAR
+           PERFORM 100-ABRIR.
+           PERFORM 100-PROCESO.
+           PERFORM 200-AGREGAR UNTIL WS-RES = 'N'.
+           PERFORM 100-CERRAR.
        STOP RUN.
 
        100-ABRIR.
-           OPEN I-O EMPLEADO.
+           OPEN INPUT EMPLEADO.
        100-CERRAR.
            CLOSE EMPLEADO.
 
-       100-ID.
-           DISPLAY 'ID PARA MODIFICAR OR 999 TO EXIT.'. ACCEPT ID-EMPL.
-
-               READ EMPLEADO KEY ID-EMPL
-               INVALID KEY
-               IF ID-EMPL = 999
-                   MOVE 999 TO ID-EMPL
-                   MOVE 'N' TO WS-MID DISPLAY 'COMMAND EXIT'
-                   ELSE
-                       DISPLAY 'INVALID ID'
-               NOT INVALID  KEY
-               DISPLAY REG-EMPL
-               PERFORM 100-PROCESO UNTIL WS-MID = 'N'.
-
        100-PROCESO.
-               DISPLAY '::::: DESEAS MODIFICAR S/N? :::::'
-               ACCEPT WS-MID.
-               IF WS-MID = 'S'
-                   PERFORM 100-DATOS THRU 103-FING
-                   REWRITE REG-EMPL
-                   DISPLAY 'NEW DATA : ' REG-EMPL
-                   PERFORM 100-ID.
+           DISPLAY ':::::::::REGISTRO ACTUALES:::::::::'.
 
-           100-DATOS.
-               DISPLAY 'CURRENT DATA: ' REG-EMPL.
+           DISPLAY 'CONSULTAR BD? S/N'.
+           ACCEPT WS-MID.
+               IF WS-MID = 'S'
+                   PERFORM 100-LEER UNTIL WS-FLAG EQUAL 1.
+               IF WS-MID = 'N'
+                   CLOSE EMPLEADO.
+
+           100-LEER.
+               READ EMPLEADO AT END CLOSE EMPLEADO MOVE 1 TO WS-FLAG
+               NOT AT END DISPLAY REG-EMPL.
+
+       200-AGREGAR.
+           OPEN I-O EMPLEADO
+           DISPLAY 'AGREGAR REGISTRO? S/N'.
+           ACCEPT WS-RES.
+               IF WS-RES = 'S'
+                   PERFORM 100-DATOS THRU 103-FING
+                   WRITE REG-EMPL
+                   DISPLAY 'ESCRITO'
+                   MOVE 0 TO WS-FLAG
+                   PERFORM 100-PROCESO.
+
+       100-DATOS.
                DISPLAY '--------------INPUT NEW DATA-----------------'
+               DISPLAY 'ID'                        ACCEPT ID-EMPL.
                DISPLAY 'NOMBRE'                    ACCEPT NOM-EMPL.
                101-DATOS.
                DISPLAY 'CLV-DEP'.                  ACCEPT CLV-DEP.
